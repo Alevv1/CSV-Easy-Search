@@ -1,5 +1,5 @@
 
-import { useState } from 'react'
+import React, { useState, useCallback } from 'react';
 import './App.css'
 
 
@@ -15,27 +15,51 @@ const APP_STATUS = {
 type appStatusType = typeof APP_STATUS[keyof typeof APP_STATUS]
 
 function App() {
-
-
-  const {appStatus, setAppStatus} = useState(APP_STATUS.IDLE)
+  const initialStatus = APP_STATUS.IDLE
+  const [appStatus, setAppStatus] = useState<appStatusType>(initialStatus);
   const [file, setFile] = useState<File | null>(null)
 
+  const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+    const [file] = files ?? [];
 
-  const handleInputChange = (event: React.
-    ChangeEvent<HTMLInputElement>)=>{
-      const[file] = event.target.files ?? []
-
-
-      if (file) {
-        console.log(file) 
-        setFile(file)
-        setAppStatus(APP_STATUS.READY_UPLOAD)
-      }
+    if (!file) {
+      console.log('No file selected');
+      setAppStatus(APP_STATUS.ERROR);
+      return;
     }
     
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) =>{
+    console.log(file);
+    setFile(file);
+    setAppStatus(APP_STATUS.READY_UPLOAD);
+  }, []);
+    
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault()
-      console.log('TODO')
+    
+      if (!file) {
+        console.log('No file selected')
+        return
+      }
+    
+      const formData = new FormData()
+      formData.append('file', file)
+    
+      try {
+        const response = await fetch('http://localhost:3000/api/files', {
+          method: 'POST',
+          body: formData
+        })
+    
+        if (!response.ok) {
+          throw new Error('Failed to upload file')
+        }
+    
+        const data = await response.json()
+        console.log('File uploaded successfully', data)
+      } catch (error) {
+        console.error('Error uploading file', error)
+      }
     }
 
 
@@ -55,8 +79,10 @@ function App() {
     />
     <button type="submit">
       Upload
+      
     </button>
   </form>
+
 </div>
 
     </>
