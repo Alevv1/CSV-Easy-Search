@@ -2,7 +2,6 @@
 import React, { useState, useCallback } from 'react';
 import './App.css'
 import { Search } from '../steps/Search'
-import { Data } from '../types'
 
 
 interface DataItem {
@@ -27,7 +26,7 @@ function App() {
   const [data, setData] = useState<DataItem[]>([]); // Nuevo estado para almacenar los datos
 
   const initialStatus = APP_STATUS.IDLE
-  const [appStatus, setAppStatus] = useState<appStatusType>(initialStatus);
+  const [, setAppStatus] = useState<appStatusType>(initialStatus);
   const [file, setFile] = useState<File | null>(null)
 
   const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
