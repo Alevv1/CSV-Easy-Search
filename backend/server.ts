@@ -74,6 +74,17 @@ app.get('/api/users', async(req,res) => {
     return res.status(200).json({ data: filteredData })
 })
 
+app.use((req, res, next) => {
+    const hasTrailingQuestionMark = req.originalUrl.endsWith('?');
+    if (hasTrailingQuestionMark) {
+        const newUrl = req.originalUrl.slice(0, -1);
+        return res.redirect(301, newUrl);
+    }
+    next();
+});
+
+
 app.listen(port, () => {
     console.log(`Server is running on port http://localhost:${port}`);
 });
+

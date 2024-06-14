@@ -66,7 +66,7 @@ function App() {
         throw new Error('Failed to upload file')
       }
 
-      
+
       const responseData = await response.json();
       setData(responseData.data); // Actualiza el estado con los datos
       console.log('File uploaded successfully', responseData);
@@ -79,25 +79,25 @@ function App() {
 
   return (
     <>
-      <div>
+      <body className="upload-section">
         <h3>Fullstack Test ShawAndPartners</h3>
-        <form onSubmit={handleSubmit}>
-          <label>Choose a CSV file:</label>
+        <form onSubmit={handleSubmit} className="upload-form">
+          <label htmlFor="file">Choose a CSV file:</label>
           <input
             onChange={handleInputChange}
             type="file"
             name="file"
+            id="file"
             accept=".csv"
             required
+            className="file-input"
           />
-          <button type="submit">
+          <button type="submit" className="upload-button">
             Upload
           </button>
         </form>
-
-       <Search initialData={data || []} />
-      
-      </div>
+        <Search initialData={data || []} />
+      </body>
     </>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {searchData} from '../services/search'
+
 interface DataItem {
   name: string;
   city: string;
@@ -60,19 +61,29 @@ export const Search: React.FC<SearchProps> = ({ initialData }) => {
 
 
   return (
-    <div>
+    <div className="container">
       <h1>Search</h1>
       <form>
-        <input onChange={handleSearch} type="search" placeholder="Search information..." />
+        <input 
+          onChange={handleSearch} 
+          type="search" 
+          placeholder="Search information..." 
+          className="search-input"
+        />
       </form>
-      {data.map((row)=> (
-          <li key={row.name}>
-            <article>
-              {Object.entries(row).map(([key, value]) => <p key={key}><strong>{key}: </strong>{value}</p>)}
+      <ul className="grid">
+        {data.map((row) => (
+          <li key={row.name} className="grid-item">
+            <article className="card">
+              {Object.entries(row).map(([key, value]) => (
+                <p key={key}>
+                  <strong>{key}: </strong>{value}
+                </p>
+              ))}
             </article>
           </li>
-        ))
-        }
+        ))}
+      </ul>
     </div>
   );
 };
