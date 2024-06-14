@@ -4,3 +4,7 @@ export type ApiUploadResponse = {
     data: Data
     message: string
 }
+
+export type ApiSearchResponse = {
+    data: Data
+}
