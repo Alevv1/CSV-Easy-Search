@@ -32,7 +32,7 @@ app.post('/api/files', upload.single('file') ,async (req,res) => {
     try{
         const rawCsv = Buffer.from(file.buffer).toString('utf8')
         console.log(rawCsv)
-        json = csvToJson.csvStringToJson(rawCsv)
+        json = csvToJson.fieldDelimiter(',').csvStringToJson(rawCsv)
         
 
     }catch(error){
@@ -41,7 +41,6 @@ app.post('/api/files', upload.single('file') ,async (req,res) => {
     }
     
     userData = json
-
 
     return res.status(200).json({ data: userData, message: 'success'})
 })
