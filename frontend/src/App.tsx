@@ -5,6 +5,13 @@ import { Search } from '../steps/Search'
 import { Data } from '../types'
 
 
+interface DataItem {
+  name: string;
+  city: string;
+  country: string;
+  favorite_sport: string;
+}
+
 const APP_STATUS = {
   IDLE: 'idle',
   ERROR: 'error',
@@ -17,7 +24,7 @@ const APP_STATUS = {
 type appStatusType = typeof APP_STATUS[keyof typeof APP_STATUS]
 
 function App() {
-  const [data, setData] = useState([]); // Define data in the state
+  const [data, setData] = useState<DataItem[]>([]); // Nuevo estado para almacenar los datos
 
   const initialStatus = APP_STATUS.IDLE
   const [appStatus, setAppStatus] = useState<appStatusType>(initialStatus);
@@ -59,12 +66,14 @@ function App() {
         throw new Error('Failed to upload file')
       }
 
-      const data = await response.json()
-      console.log('File uploaded successfully', data)
+      
+      const responseData = await response.json();
+      setData(responseData.data); // Actualiza el estado con los datos
+      console.log('File uploaded successfully', responseData);
     } catch (error) {
-      console.error('Error uploading file', error)
+      console.error('Error uploading file', error);
     }
-  }
+  };
 
 
 
@@ -86,12 +95,11 @@ function App() {
           </button>
         </form>
 
-      </div>
-      <Search initialData={data || []} />
+       <Search initialData={data || []} />
       
-
+      </div>
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;

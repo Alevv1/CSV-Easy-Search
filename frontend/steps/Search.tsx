@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { searchData } from '../services/search'; // Asegúrate de importar tu función searchData
-
+import {searchData} from '../services/search'
 interface DataItem {
   name: string;
   city: string;
@@ -21,21 +20,44 @@ export const Search: React.FC<SearchProps> = ({ initialData }) => {
   };
 
   useEffect(() => {
-    if (search !== '') {
-      searchData(search)
-        .then(response => {
-          const [err, newData] = response;
-          if (err) {
-            console.error(err);
-            return;
-          }
-
-          if (newData) setData(newData);
-        });
-    } else {
+    if (search === '') {
       setData(initialData);
+    } else {
+      const filteredData = initialData.filter((item: DataItem) =>
+        Object.values(item).some((val: string | number) =>
+          val.toString().toLowerCase().includes(search.toLowerCase())
+        )
+      );
+      setData(filteredData);
     }
   }, [search, initialData]);
+
+  useEffect(() => {
+    searchData(search)
+      .then(response => {
+        const [err, newData] = response;
+        if (err) {
+          console.error(err);
+          return;
+        }
+  
+        if (newData) {
+          const formattedData: DataItem[] = newData.map((item: any) => ({
+            name: item.name,
+            city: item.city,
+            country: item.country,
+            favorite_sport: item.favorite_sport
+          }));
+  
+          setData(formattedData);
+        }
+      })
+      .catch(error => console.error(error));
+  }, [search, initialData]);
+
+
+
+
 
   return (
     <div>
@@ -43,14 +65,14 @@ export const Search: React.FC<SearchProps> = ({ initialData }) => {
       <form>
         <input onChange={handleSearch} type="search" placeholder="Search information..." />
       </form>
-      {data.map((item: DataItem, index: number) => (
-        <div key={index}>
-          <p>{item.name}</p>
-          <p>{item.city}</p>
-          <p>{item.country}</p>
-          <p>{item.favorite_sport}</p>
-        </div>
-      ))}
+      {data.map((row)=> (
+          <li key={row.name}>
+            <article>
+              {Object.entries(row).map(([key, value]) => <p key={key}><strong>{key}: </strong>{value}</p>)}
+            </article>
+          </li>
+        ))
+        }
     </div>
   );
 };

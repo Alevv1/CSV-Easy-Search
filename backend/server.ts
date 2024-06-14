@@ -42,13 +42,13 @@ app.post('/api/files', upload.single('file') ,async (req,res) => {
     
     userData = json
 
-    return res.status(200).json({ data: userData, message: 'success'})
+    return res.status(200).json({ data: userData, message: 'The file was uploaded successfully'})
 })
 
 
 
 
-app.get('api/users', async(req,res) => {
+app.get('/api/users', async(req,res) => {
     const {q} = req.query
 
     if (!q) {
@@ -71,11 +71,9 @@ app.get('api/users', async(req,res) => {
         .some(value => value.toLocaleLowerCase().includes(search))
     })
 
-    return res.status(200).json({ data:[]})
+    return res.status(200).json({ data: filteredData })
 })
-
-
 
 app.listen(port, () => {
     console.log(`Server is running on port http://localhost:${port}`);
-  });
+});
