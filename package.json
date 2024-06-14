@@ -9,7 +9,9 @@
     "test:frontend": "cd frontend && npm install && npm test",
     "dev:backend": "cd backend && npm install && npm run dev",
     "dev:frontend": "cd frontend && npm install && npm run dev",
-    "dev": "npm-run-all --parallel dev:backend dev:frontend"
+    "dev": "npm-run-all --parallel dev:backend dev:frontend",
+    "build": "cd frontend && npm install && npm run build",
+    "start": "cd backend && npm run start"
   },
   "keywords": [],
   "author": "",
