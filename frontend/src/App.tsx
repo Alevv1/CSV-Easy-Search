@@ -78,10 +78,10 @@ function App() {
 
   return (
     <>
-      <body className="upload-section">
-        <h3>Fullstack Test ShawAndPartners</h3>
+      <div className="upload-section">
+        <h3 className="title">CSV Easy Search</h3>
         <form onSubmit={handleSubmit} className="upload-form">
-          <label htmlFor="file">Choose a CSV file:</label>
+          <label htmlFor="file" className="label">Upload your CSV file:</label>
           <input
             onChange={handleInputChange}
             type="file"
@@ -96,7 +96,7 @@ function App() {
           </button>
         </form>
         <Search initialData={data || []} />
-      </body>
+      </div>
     </>
   );
 };
