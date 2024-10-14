@@ -52,24 +52,13 @@ function App() {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('file', file);
-
     try {
       setAppStatus(APP_STATUS.UPLOADING);
-      const response = await fetch('http://localhost:3000/api/files', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to upload file');
-      }
-
-      const responseData = await response.json();
-      setData(responseData.data);
-      console.log('File uploaded successfully', responseData);
+      const text = await file.text();
+      const parsedData = parseCsvToJson(text);
+      setData(parsedData);
       setAppStatus(APP_STATUS.READY_USAGE);
+      console.log('File uploaded successfully', parsedData);
     } catch (error) {
       console.error('Error uploading file', error);
       setAppStatus(APP_STATUS.ERROR);
@@ -77,35 +66,60 @@ function App() {
   };
 
   const handleDemoUpload = async () => {
-    const demoFileUrl = '/demo.csv'; 
-
+    const demoFileUrl = '/demo.csv'; // Acceso directo a la carpeta public
+  
     try {
-      const response = await fetch(demoFileUrl);
-      const blob = await response.blob();
-      const formData = new FormData();
-      formData.append('file', new File([blob], 'demo.csv', { type: 'text/csv' }));
-
       setAppStatus(APP_STATUS.UPLOADING);
-
-      const uploadResponse = await fetch('http://localhost:3000/api/files', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!uploadResponse.ok) {
-        throw new Error('Failed to upload demo file');
+      const response = await fetch(demoFileUrl);
+  
+      if (!response.ok) {
+        throw new Error('Failed to load demo file');
       }
-
-      const responseData = await uploadResponse.json();
-      setData(responseData.data);
-      console.log('Demo file uploaded successfully', responseData);
+  
+      const text = await response.text();
+      const parsedData = parseCsvToJson(text);
+      if (parsedData.length === 0) {
+        throw new Error('No valid data found in demo CSV');
+      }
+      setData(parsedData);
       setAppStatus(APP_STATUS.READY_USAGE);
+      console.log('Demo file loaded successfully:', parsedData);
     } catch (error) {
-      console.error('Error uploading demo file', error);
+      console.error('Error loading demo file:', error);
       setAppStatus(APP_STATUS.ERROR);
     }
   };
 
+  const parseCsvToJson = (csvText: string): DataItem[] => {
+    const lines = csvText.split('\n');
+    const headers = lines[0].split(',');
+  
+    const result: DataItem[] = lines.slice(1)
+      .map((line) => {
+        const values = line.split(',');
+        const item: Partial<DataItem> = {}; // Usamos Partial para inicializar como una posible parte de DataItem
+  
+        headers.forEach((header, index) => {
+          item[header.trim() as keyof DataItem] = values[index]?.trim() || '';
+        });
+  
+        // Verificar si el objeto cumple con la interfaz DataItem
+        if (
+          typeof item.name === 'string' &&
+          typeof item.city === 'string' &&
+          typeof item.country === 'string' &&
+          typeof item.favorite_sport === 'string'
+        ) {
+          return item as DataItem; // En este punto, TypeScript debería aceptar la conversión ya que hemos validado los campos
+        }
+  
+        return null;
+      })
+      .filter((item): item is DataItem => item !== null); // Filtrar nulos y asegurarse de que el resultado sea de tipo DataItem
+  
+    return result;
+  };
+  
   return (
     <>
       <div className="upload-section">
