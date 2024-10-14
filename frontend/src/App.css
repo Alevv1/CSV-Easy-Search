@@ -1,6 +1,10 @@
 /* Fuente moderna para todo el proyecto */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
+*{
+  max-height: 600vh;
+}
+
 body {
   font-family: 'Roboto', sans-serif;
   background: linear-gradient(to bottom right, #e0f7fa, #80deea);
@@ -9,10 +13,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
 }
 
-/* Sección principal */
 .upload-section {
   width: 140vh;  
   padding: 40px;
@@ -21,9 +23,9 @@ body {
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   text-align: center;
+  min-height: 80vh;
 }
 
-/* Título estilizado */
 .title {
   font-size: 2rem;
   font-weight: bold;
@@ -31,7 +33,6 @@ body {
   margin-bottom: 20px;
 }
 
-/* Formulario de carga */
 .upload-form {
   display: flex;
   flex-direction: column;
@@ -47,7 +48,6 @@ body {
   color: #00796b;
 }
 
-/* Entrada de archivo */
 .file-input {
   padding: 12px;
   font-size: 16px;
@@ -62,7 +62,6 @@ body {
   border-color: #00796b;
 }
 
-/* Botón de carga */
 .upload-button {
   background: linear-gradient(to right, #00796b, #004d40);
   color: white;
@@ -80,7 +79,6 @@ body {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Formulario de búsqueda */
 .search-form {
   display: flex;
   justify-content: center;
@@ -98,7 +96,6 @@ body {
   transition: all 0.3s ease;
 }
 
-/* Grilla de resultados */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -108,13 +105,11 @@ body {
   width: 100%;
 }
 
-/* Ítems de la grilla */
 .grid-item {
   display: flex;
   justify-content: center;
 }
 
-/* Tarjeta con sombra suave */
 .card {
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
@@ -129,7 +124,6 @@ body {
   transform: translateY(-5px);
 }
 
-/* Texto en las tarjetas */
 .card p {
   margin: 0;
   margin-bottom: 10px;
@@ -147,4 +141,22 @@ body {
     width: 100%;
     max-width: 800px;
   }
+}
+
+.demo-button {
+  background: linear-gradient(to right, #ff9800, #ff5722);
+  color: white;
+  padding: 12px 25px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+.demo-button:hover {
+  background: linear-gradient(to right, #ff5722, #ff9800);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
